@@ -7,10 +7,9 @@ export type TodoRow = Database["public"]["Tables"]["todo"]["Row"];
 export type TodoRowInsert = Database["public"]["Tables"]["todo"]["Insert"];
 export type TodoRowUpdate = Database["public"]["Tables"]["todo"]["Update"];
 
-function handleError(error: { message?: string } | Error) {
+function handleError(error) {
   console.error(error);
-  const message = error instanceof Error ? error.message : error.message || "Unknown error";
-  throw new Error(message);
+  throw new Error(error.message);
 }
 
 export async function getTodos({ searchInput = "" }): Promise<TodoRow[]> {
@@ -31,15 +30,10 @@ export async function getTodos({ searchInput = "" }): Promise<TodoRow[]> {
 export async function createTodo(todo: TodoRowInsert) {
   const supabase = await createServerSupabaseClient();
 
-  const insertData: TodoRowInsert = {
+  const { data, error } = await supabase.from("todo").insert({
     ...todo,
     created_at: new Date().toISOString(),
-  };
-
-  // Type assertion needed due to Supabase type inference issue
-  const { data, error } = await (supabase
-    .from("todo") as any)
-    .insert([insertData]);
+  });
 
   if (error) {
     handleError(error);
@@ -52,15 +46,12 @@ export async function updateTodo(todo: TodoRowUpdate) {
   const supabase = await createServerSupabaseClient();
   console.log(todo);
 
-  const updateData: TodoRowUpdate = {
-    ...todo,
-    updated_at: new Date().toISOString(),
-  };
-
-  // Type assertion needed due to Supabase type inference issue
-  const { data, error } = await (supabase
-    .from("todo") as any)
-    .update(updateData)
+  const { data, error } = await supabase
+    .from("todo")
+    .update({
+      ...todo,
+      updated_at: new Date().toISOString(),
+    })
     .eq("id", todo.id);
 
   if (error) {

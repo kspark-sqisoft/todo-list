@@ -7,7 +7,7 @@ import { Database } from "types_db";
 export const createServerSupabaseClient = async (
   cookieStore: ReturnType<typeof cookies> = cookies(),
   admin: boolean = false
-): Promise<ReturnType<typeof createServerClient<Database>>> => {
+) => {
   return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     admin
