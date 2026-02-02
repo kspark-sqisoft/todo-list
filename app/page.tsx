@@ -1,8 +1,9 @@
+import UI from "./UI";
 
 export default function Home() {
   return (
-    <main>TODO LIST
-
+    <main>
+      <UI />
     </main>
   );
 }

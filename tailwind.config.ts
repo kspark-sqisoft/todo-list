@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-import typography from "@tailwindcss/typography";
+import withMT from "@material-tailwind/react/utils/withMT";
 
 const config: Config = {
   content: [
@@ -9,7 +9,7 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {},
-  plugins: [typography],
+  plugins: [require("@tailwindcss/typography")],
 };
 
-export default config;
+export default withMT(config);
